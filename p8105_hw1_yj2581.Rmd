@@ -61,16 +61,13 @@ These results explain what happens when try to take the mean:
 
 ```{r convert and multiply, warning = FALSE}
 # Show the results and hide the warning message
-logical_to_numeric <- as.numeric(pull(problem_1, vec_logical)) *
-                      pull(problem_1, vec_numeric)
+logical_to_numeric <- as.numeric(pull(problem_1, vec_logical)) * pull(problem_1, vec_numeric)
 logical_to_numeric
 
-logical_to_factor <- as.factor(pull(problem_1, vec_logical)) *
-                     pull(problem_1, vec_numeric)
+logical_to_factor <- as.factor(pull(problem_1, vec_logical)) * pull(problem_1, vec_numeric)
 logical_to_factor
 
-logical_factor_numeric <- as.numeric(as.factor(pull(problem_1, vec_logical))) *
-                          pull(problem_1, vec_numeric)
+logical_factor_numeric <- as.numeric(as.factor(pull(problem_1, vec_logical))) * pull(problem_1, vec_numeric)
 logical_factor_numeric
 ```
 
