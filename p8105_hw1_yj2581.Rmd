@@ -2,7 +2,7 @@
 title: "p8105_hw1_yj2581"
 author: "YucongJiang"
 date: "2019-9-16"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include = FALSE}
@@ -102,7 +102,7 @@ problem_2 <- tibble(
 
 #### Make 3 scatterplots of `y` vs `x` based on the instruction; save the first scatterplot
 
-```{r make scatterplot}
+```{r scatterplot}
 ggplot(problem_2, aes(x = x, y = y, color = logical_indicator)) + geom_point()
 ggsave("scatterplot_1.png") # save the first scatterplot
 
