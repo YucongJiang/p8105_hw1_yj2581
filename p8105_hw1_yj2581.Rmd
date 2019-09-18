@@ -1,0 +1,117 @@
+---
+title: "p8105_hw1_yj2581"
+author: "YucongJiang"
+date: "2019-9-16"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+# load the necessary package
+library(tidyverse)
+```
+
+## Problem 1
+
+#### Create the data frame `problem_1` based on the instruction
+
+```{r dataframe_create_problem1}
+set.seed(2581) # set the randomized seed to ensure the reproducibility
+
+problem_1 <- tibble(
+  vec_numeric = rnorm(8),
+  vec_logical = vec_numeric > 0,
+  vec_character = c("Tom", "Sam", "Bob", "Ivy", "Hans", "Ann", "Tony", "Roy"),
+  vec_grade = factor(c("A", "B", "C", "B", "B", "A", "C", "B"))
+)
+```
+
+#### Take the mean of each variable in the dataframe
+
+  * The mean of `vec_numeric` is `r mean(pull(problem_1, vec_numeric))`.
+  * The mean of `vec_logical` is `r mean(pull(problem_1, vec_logical))`.
+  * The mean of `vec_character` is `r mean(pull(problem_1, vec_character))`.
+  * The mean of `vec_grade` is `r mean(pull(problem_1, vec_grade))`.
+  
+We can see that:
+
+  * It works when taking the mean of `vec_numeric` and `vec_logical`.
+  * It doesn't work when taking the mean of `vec_character` and `vec_grade`.
+
+#### Apply `as.numeric` function to the logical, character and factor variables
+
+```{r type_transform, eval = FALSE}
+as.numeric(pull(problem_1, vec_logical))
+as.numeric(pull(problem_1, vec_character))
+as.numeric(pull(problem_1, vec_grade))
+```
+
+We can see that:
+
+  * For `vec_logical`, the values `FALSE` and `TRUE` are transformed to `0` and `1` respectively.
+  * For `vec_character`, it doesn't work and the results are all `NA`.
+  * For `vec_grade`, it returns the underlying integer representation. Reference from R Documentation.
+  
+These results explain what happens when try to take the mean:
+
+  * For `vec_logical`, it is coerced first and then taken the mean.
+  * For `vec_character`, it doesn't work since the character cannot be converted to the numeric.
+  * For `vec_grade`, the integer may not correspond to the levels, so the function refuses to take the mean.
+  
+#### Convert the logical vector to different types and multiply the random sample by the results
+
+```{r convert and multiply, warning = FALSE}
+# Show the results and hide the warning message
+logical_to_numeric <- as.numeric(pull(problem_1, vec_logical)) *
+                      pull(problem_1, vec_numeric)
+logical_to_numeric
+
+logical_to_factor <- as.factor(pull(problem_1, vec_logical)) *
+                     pull(problem_1, vec_numeric)
+logical_to_factor
+
+logical_factor_numeric <- as.numeric(as.factor(pull(problem_1, vec_logical))) *
+                          pull(problem_1, vec_numeric)
+logical_factor_numeric
+```
+
+For `logical_to_factor`, it warns '*' not meaningful for factors.
+
+## Problem 2
+
+#### Create the dataframe based on the instruction
+
+```{r dataframe_create_problem2}
+set.seed(8125) # set the randomized seed to ensure the reproducibility
+
+problem_2 <- tibble(
+  x = rnorm(500),
+  y = rnorm(500),
+  logical_indicator = x + y > 1,
+  numeric_indicator = as.numeric(logical_indicator),
+  factor_indicator = as.factor(numeric_indicator)
+)
+```
+
+#### Write a short description of your vector using inline R code
+
+  * The dataset has `r nrow(problem_2)` rows and `r ncol(problem_2)` columns.
+  * The mean of `x` is `r mean(pull(problem_2, x))`.
+  * The median of `x` is `r median(pull(problem_2, x))`.
+  * The standard deviation of `x` is `r sd(pull(problem_2, x))`.
+  * The proportion of cases for which `x + y > 1` is `r sum(pull(problem_2, numeric_indicator))/500`.
+
+#### Make 3 scatterplots of `y` vs `x` based on the instruction; save the first scatterplot
+
+```{r make scatterplot}
+ggplot(problem_2, aes(x = x, y = y, color = logical_indicator)) + geom_point()
+ggsave("scatterplot_1.png") # save the first scatterplot
+
+ggplot(problem_2, aes(x = x, y = y, color = numeric_indicator)) + geom_point()
+
+ggplot(problem_2, aes(x = x, y = y, color = factor_indicator)) + geom_point()
+```
+
+  * For the first and third scatterplots, the variables are discrete, so the plots use 2 colors: 
+  red represents `FALSE` or `0` and cyan represents `TRUE` or `1`.
+  * For the second scatterplot, the variables are continuous, so the color scales from black to blue 
+  to represent the variables from 0 to 1
